@@ -5,15 +5,14 @@ script, **this file wins**.
 
 ## Branding & colours
 - Always build with `"theme": "brand-red"` (`assets/themes/brand-red.json`):
-  - **#DC0000 brand red** only for accents: area badges A–E, benefit pills, persona rings, connectors, headings.
+  - **#DC0000 brand red** only for accents: area badges A–E, the hero rule, connectors, headings.
   - **#FFFFFF white** is the main colour: page background, capability blocks, chips.
   - **Shades of grey** for structure: bands (#3C3C3C / #6E6E6E / #E6E6E6), panels, borders, text.
-  - Personas use the official `generic:User (Non-SAP)` icon (set in the theme).
 - Status colours (live green, planned blue dashed, evaluate orange dashed, not in scope grey tag) are *not*
   themed - they must stay distinguishable from the brand red. Never use red to mean a status.
 - No other colours. Do not recolour official SAP icons.
 
-## Our landscape (default content for our Big Picture)
+## Our landscape (default content for our capability map)
 Source of truth: `examples/our_landscape.json` - build with
 `python examples/big_picture_reference.py <out> --config examples/our_landscape.json`.
 Keep it updated when the landscape changes instead of editing the script.
@@ -32,9 +31,9 @@ Keep it updated when the landscape changes instead of editing the script.
 - Only set a status the business has stated; everything else stays neutral.
 
 ## Branding & title
-- Title: "SAP BTP Big Picture – Our Landscape" (replace with company name once confirmed).
-- Hero text: "The Big Picture".
+- Title: "SAP BTP Capability Map – Our Landscape" (replace with company name once confirmed).
+- Hero text: "Your Company" until the company name is confirmed.
 
 ## Delivery
-- File name: `our-sap-btp-big-picture-v<version>.drawio`; version and date in the footer (`"version"` in the config).
+- File name: `our-sap-btp-capability-map-v<version>.drawio`; version and date in the footer (`"version"` in the config).
 - Deliver only the .drawio.

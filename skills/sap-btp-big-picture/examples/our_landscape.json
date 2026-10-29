@@ -1,24 +1,96 @@
 {
   "_comment": "Our landscape as stated on 2026-10-01. Statuses only where stated; everything else stays neutral.",
-  "title": "SAP BTP Big Picture – Our Landscape",
+  "title": "SAP BTP Capability Map – Our Landscape",
   "theme": "brand-red",
   "version": "v0.1 · 2026-10-01",
   "apps_title": "SAP ERP",
-  "apps": ["Sales", "Fulfillment", "SCM", "Finance", ["Controlling", "(CO)"]],
+  "apps": [
+    "Sales",
+    "Fulfillment",
+    "SCM",
+    "Finance",
+    [
+      "Controlling",
+      "(CO)"
+    ]
+  ],
   "ecosystem_title": "Our non-SAP landscape & open ecosystem",
-  "ecosystem": [["Salesforce", "CRM"], ["PTC", "PLM"], ["Microsoft Azure", "Data warehouse & AI"],
-                ["Microsoft Power Platform", "Extensions"], ["Solution Extensions", "Partners"],
-                ["Event Sources", "e.g. plants, warehouses, logistics"], ["3rd party", "Data Providers"]],
+  "ecosystem": [
+    [
+      "Salesforce",
+      "CRM"
+    ],
+    [
+      "PTC",
+      "PLM"
+    ],
+    [
+      "Microsoft Azure",
+      "Data warehouse & AI"
+    ],
+    [
+      "Microsoft Power Platform",
+      "Extensions"
+    ],
+    [
+      "Solution Extensions",
+      "Partners"
+    ],
+    [
+      "Event Sources",
+      "e.g. plants, warehouses, logistics"
+    ],
+    [
+      "3rd party",
+      "Data Providers"
+    ]
+  ],
   "current": {
-    "B": {"title": ["Microsoft", "Power Platform"], "lines": ["Extensions today;", "SAP BTP for SAP-centric", "scenarios: to be decided"]},
-    "C": {"title": ["Microsoft Azure"], "lines": ["Our AI solution"]},
-    "D": {"title": ["Microsoft Azure"], "lines": ["Our business warehouse"]}
+    "B": {
+      "title": [
+        "Microsoft",
+        "Power Platform"
+      ],
+      "lines": [
+        "Extensions today;",
+        "SAP BTP for SAP-centric",
+        "scenarios: to be decided"
+      ]
+    },
+    "C": {
+      "title": [
+        "Microsoft Azure"
+      ],
+      "lines": [
+        "Our AI solution"
+      ]
+    },
+    "D": {
+      "title": [
+        "Microsoft Azure"
+      ],
+      "lines": [
+        "Our business warehouse"
+      ]
+    }
   },
   "status": {
-    "Sales": "live", "Fulfillment": "live", "SCM": "live", "Finance": "live", "Controlling": "live",
-    "Salesforce": "live", "PTC": "live", "Microsoft Azure": "live", "Microsoft Power Platform": "live",
-    "SAP Build": "evaluate", "SAP CAP": "evaluate", "ABAP Cloud": "evaluate",
-    "AI Foundation": "out", "SAP Datasphere": "out", "Business Warehouse": "out", "SAP Databricks": "out"
+    "Sales": "live",
+    "Fulfillment": "live",
+    "SCM": "live",
+    "Finance": "live",
+    "Controlling": "live",
+    "Salesforce": "live",
+    "PTC": "live",
+    "Microsoft Azure": "live",
+    "Microsoft Power Platform": "live",
+    "SAP Build": "evaluate",
+    "SAP CAP": "evaluate",
+    "ABAP Cloud": "evaluate",
+    "AI Foundation": "out",
+    "SAP Datasphere": "out",
+    "Business Warehouse": "out",
+    "SAP Databricks": "out"
   },
   "note": "Open points: SAP ERP release (ECC or S/4HANA); integration platform (SAP Integration Suite or other) for Salesforce/PTC <-> SAP ERP; analytics front end (SAP Analytics Cloud or other); BTP adoption decision for SAP-centric extensions."
 }

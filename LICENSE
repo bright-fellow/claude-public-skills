@@ -35,3 +35,6 @@ third-party content keeps its own licence and is not relicensed under MIT:
 - SAP BTP icons in skills/sap-btp-solution-diagrams/assets/sap_btp_icons.json
   follow SAP's public BTP solution diagram guidelines. SAP and the SAP logo are
   trademarks of SAP SE; Microsoft and Azure are trademarks of Microsoft.
+- The SAP BTP capability map in skills/sap-btp-big-picture is an independent
+  work (own layout, wording and palette) and is not affiliated with or
+  endorsed by SAP; SAP product names in it are trademarks of SAP SE.

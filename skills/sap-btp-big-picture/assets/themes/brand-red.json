@@ -1,5 +1,5 @@
 {
-  "_comment": "Company scheme: brand red #DC0000 for accents only, white as main colour, shades of grey for structure. Status colours (live/planned/evaluate/out) are intentionally not themed.",
+  "_comment": "Example company scheme: red for accents only, white as main colour, shades of grey for structure. Status colours (live/planned/evaluate/out) are intentionally not themed.",
   "page": "#FFFFFF",
   "apps_band": "#3C3C3C",
   "btp_band": "#6E6E6E",
@@ -16,13 +16,10 @@
   "accent_dark": "#B00000",
   "accent_text": "#DC0000",
   "connector": "#E86A6A",
-  "fusion": "#B3B3B3",
   "flow": "#3C3C3C",
   "heading": "#DC0000",
-  "joule_dark": "#5A5A5A",
-  "hero_frame": "#EDEDED",
   "halo": "#E0E0E0",
   "dashed_frame": "#A6A6A6",
   "tag_text": "#262626",
-  "persona_icon": "generic:User (Non-SAP)"
+  "soft_line": "#B3B3B3"
 }

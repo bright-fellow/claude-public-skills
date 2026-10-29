@@ -1,15 +1,19 @@
 ---
 name: "sap-btp-big-picture"
-description: Create "The Big Picture" - the SAP BTP Capabilities Reference Architecture for Best Transformation poster (Toolchain A, App Dev & Automation B, Custom Business AI C, Business Data D, Integration E, Platform Foundation, Open Ecosystem, Key Sites) - as an editable draw.io file with the official, always up-to-date SAP BTP solution-diagram icons, either as the generic reference or tailored to a customer with a live / planned / evaluate / out-of-scope status overlay. Use whenever the user asks for a Big Picture, BTP capability map, BTP landscape poster, "where do we stand on BTP", BTP adoption/heat map, target picture or capability overview across BTP, even if they don't say "Big Picture". For a single solution or integration architecture use sap-btp-solution-diagrams instead.
+description: Create a "Your Company" big picture of SAP BTP - an SAP BTP capability map poster (A transformation toolchain, B apps & automation, C business AI, D business data & analytics, E integration, platform foundation, partners & data sources, learn-more panel, adoption summary) - as an editable draw.io file with the official, always up-to-date SAP BTP solution-diagram icons, either generic or tailored to an organisation with a live / planned / evaluate / out-of-scope status overlay. Use whenever the user asks for a big picture, BTP capability map, BTP landscape poster, "where do we stand on BTP", BTP adoption/heat map, target picture or capability overview across BTP. For a single solution or integration architecture use sap-btp-solution-diagrams instead.
 ---
 
-# SAP BTP Big Picture
+# SAP BTP big picture (capability map)
 
-Produces the SAP BTP "Big Picture" capability poster as **one editable `.drawio` file** (diagrams.net, draw.io
-desktop, VS Code extension). It builds on the base skill **sap-btp-solution-diagrams**: same delivery rules
-(drawio only, preview PNG is for self-checking and never delivered), same layout-checker approach, and its
-`sap:` / `azure:` icon libraries stay available. This skill adds the poster primitives and the **official
-SAP BTP solution-diagram icon set** from github.com/SAP/btp-solution-diagrams.
+Produces an SAP BTP **capability map poster** - "Your Company" big picture - as **one editable `.drawio`
+file** (diagrams.net, draw.io desktop, VS Code extension). The layout, wording and "lagoon & coral" palette
+are this skill's own; it is not a copy of any SAP poster. Only the **official SAP BTP solution-diagram icons**
+(github.com/SAP/btp-solution-diagrams, Apache-2.0) and SAP product names come from SAP, and the footer says
+the map is independent and not endorsed by SAP.
+
+It builds on the base skill **sap-btp-solution-diagrams**: same delivery rules (drawio only, preview PNG is
+for self-checking and never delivered), same layout-checker approach, and its `sap:` / `azure:` icon libraries
+stay available.
 
 **Before anything else read `references/our-conventions.md`.** It holds the team's own rules and overrides
 every default in this file and in the style guide where they conflict.
@@ -21,19 +25,22 @@ every default in this file and in the style guide where they conflict.
    It compares the upstream commit with the icon set in use and, if SAP has published new or redrawn icons,
    downloads them into a cache (`~/.cache/sap-btp-big-picture/`, override with `BIGPICTURE_ICON_CACHE`) and
    prints what was added / removed / redrawn. The library always loads the newer of cache and bundled set.
-   Offline it says so and continues with the bundled set - mention that in the reply. If icons were removed,
-   fix the affected `btp:` keys (the build fails with candidate names).
+   Offline it says so and continues with the bundled set - mention that in the reply. If icons were removed
+   or renamed, fix the affected `btp:` keys (the build fails with candidate names) or add the new upstream
+   file name to `FIX` in `update_icons.py`.
 2. **Pin down the variant.**
-   - *Reference* ("show me the Big Picture"): run `examples/big_picture_reference.py` unchanged.
-   - *Customer Big Picture* (most requests): collect per capability whether it is **live**, **planned**,
-     **evaluate** or **out** of scope - from the conversation, an uploaded inventory, or LeanIX if connected.
-     Write a status JSON keyed by labels from `python examples/big_picture_reference.py --list-labels`
-     (example: `examples/customer_status_example.json`). Anything unmentioned stays neutral; never guess a
-     status - list unknowns in the footer note instead.
+   - *Generic* ("show me the big picture"): run `examples/big_picture_reference.py` unchanged - the hero
+     reads "Your Company".
+   - *Organisation map* (most requests): `--customer "<name>"` puts the name in the hero and title. Collect per
+     capability whether it is **live**, **planned**, **evaluate** or **out** of scope - from the conversation,
+     an uploaded inventory, or LeanIX if connected. Write a status JSON keyed by labels from
+     `python examples/big_picture_reference.py --list-labels` (example: `examples/customer_status_example.json`).
+     Anything unmentioned stays neutral; never guess a status - list unknowns in the footer note instead.
+     The adoption summary at the top counts and lists every status automatically.
    - *Tailored content* (extra products, dropped areas, customer systems): copy the reference script and edit
-     it; keep areas A-E, letters and colours so it still reads as the Big Picture.
-   - *Landscape config* (preferred for an organisation's own picture): one JSON holding theme, title,
-     SAP applications chips, ecosystem chips, *current solution* boxes per area and statuses - see
+     it; keep the area letters A-E so maps stay comparable.
+   - *Landscape config* (preferred for an organisation's own map): one JSON holding theme, title, hero,
+     applications and teams chips, ecosystem chips, *current solution* boxes per area and statuses - see
      `examples/our_landscape.json`. Keep the organisation's landscape there, not in code.
 3. **Build**: `python examples/big_picture_reference.py <out> --config landscape.json` (or `--status s.json
    --customer "ACME AG" --version "v0.1"`), or your edited copy. `save()` prints layout warnings and
@@ -49,20 +56,20 @@ every default in this file and in the style guide where they conflict.
 ```python
 import sys; sys.path.insert(0, "<this skill>/scripts")
 from bigpicture import BigPicture
-bp = BigPicture(5080, 1760, "Title", status={"SAP Build Apps": "live"})
+bp = BigPicture(5080, 1760, "ACME AG – SAP BTP Capability Map", hero="ACME AG", status={"SAP Build Apps": "live"})
 bp.band(x, y, w, h, "apps" | "btp" | "ecosystem" | "keysites", "Band title")
-bp.block(x, y, w, h, "B", "Best Appl. Development & Automation", "(subtitle)", joule_dx=345)  # white card, badge, Joule
-bp.value(x, y, 185, 40, ["Scalable factory for", "Extension & App development"])   # value statement column
+bp.block(x, y, w, h, "B", "Apps & automation", "Extend SAP without touching the core")  # white card + letter badge
+bp.value(x, y, 185, 40, ["Low-code to pro-code", "on one platform"])               # note column beside an area
 bp.group(x, y, w, h, "SAP Build", icon="btp:SAP Build", dashed=False)             # product group (status-able)
 bp.tile(cx, y, ["SAP Build", "Apps"], icon="btp:SAP Build Apps")                  # official icon + label
 bp.chip(x, y, w, h, ["Pro Code", "Development"], title=False)                    # capability chip (status-able)
 bp.chips(x, y, w, [...], cols=2, h=24)                                            # chip grid
-bp.benefit(cx, cy, ["Add custom AI to", "apps and processes"])                   # magenta benefit pill
-bp.persona(cx, cy, "Developers", "Build visually / pro-code")                     # generic:User (Highlight) icon
-bp.tag(cx, cy, "Deploy and Run Applications"); bp.edge(pts, "link"|"both"|"flow"|"flow2"|"fusion"|"agent"|"dotted"|"dashed")
-bp.keysite(x, y, w, h, "SAP Discovery Center", "tagline", [items], cols=2)
+bp.benefit(cx, cy, ["Label on", "a connection"])                                  # optional accent pill
+bp.tag(cx, cy, "runs on"); bp.edge(pts, "link"|"both"|"flow"|"flow2"|"soft"|"dotted"|"dashed")
+bp.keysite(x, y, w, h, "SAP Discovery Center", "one muted line", [items], cols=2)  # learn-more card
 bp.current(x, y, w, h, ["Microsoft", "Power Platform"], ["Extensions today"])        # non-SAP solution in use
-bp.legend(x, y); bp.footer(note, version=...); bp.save("/path/name")
+bp.legend(x, y); bp.summary(x, y, w, h)  # summary last: counts and lists the statuses drawn
+bp.footer(note, version=...); bp.save("/path/name")
 # theme: BigPicture(..., theme="brand-red") recolours by role at save time (assets/themes/*.json, roles in ROLES)
 ```
 
@@ -72,15 +79,17 @@ Icon keys: `btp:<service>` (official service icons, preferred), `generic:<name> 
 Rules that are easy to get wrong:
 - **Only official icons.** No icon in the set → label-only tile or chip. Never draw or imitate product logos
   (SAP Signavio, LeanIX, WalkMe, Databricks, partner logos are text only).
+- **Keep it independent.** Write notes, subtitles and labels in your own words; do not reproduce SAP posters,
+  slides or marketing copy, and do not add SAP brand colours or SAP-specific markers.
 - **Text never wraps** - one string per line; shorten wording before widening boxes.
-- **Draw order = z-order**: band → block → group → chips; badges and Joule markers come with the block.
+- **Draw order = z-order**: band → block → group → chips; badges come with the block; summary and legend last.
 - **Themes recolour, they don't re-layout**: a theme JSON maps colour roles (`ROLES` in bigpicture.py) to
-  new colours and may set `persona_icon`. Status colours are never themed.
+  new colours. Status colours are never themed.
 - **Status colours are reserved** (green live, blue dashed planned, orange dashed evaluate, grey out); do not
   use them for anything else, and only use statuses the user confirmed.
 
 ## References
 - `references/our-conventions.md` - team rules, read first, they win.
-- `references/style-guide.md` - poster palette, grid, element semantics, quality checklist.
-- `references/catalogue.md` - what the reference poster contains per area, sources, interpretation notes.
+- `references/style-guide.md` - palette, grid, element semantics, quality checklist.
+- `references/catalogue.md` - what the reference map contains per area.
 - `assets/LICENSE-btp-solution-diagrams.txt` - Apache-2.0 licence of the official icon set; keep it with the skill.

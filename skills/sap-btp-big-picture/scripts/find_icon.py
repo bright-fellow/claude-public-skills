@@ -1,4 +1,4 @@
-"""Search all icon libraries available to the Big Picture skill.
+"""Search all icon libraries available to the capability-map skill.
 
     python find_icon.py build            # search every library
     python find_icon.py ai --lib btp     # official SAP BTP service icons only
