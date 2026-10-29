@@ -20,7 +20,7 @@ Claude (Claude.ai, Claude Code and the Claude Agent SDK). Each skill is a self-c
 skills/
 ├── business-explainer/
 │   ├── SKILL.md                     # instructions + embedded toolkit (scripts, CSS, JS, template)
-│   └── examples/integration-teaser/ # example script.json + review sheet
+│   └── examples/integration-teaser/ # script.json, review sheet, finished MP4
 ├── sap-btp-solution-diagrams/
 │   ├── SKILL.md
 │   ├── scripts/
@@ -110,7 +110,7 @@ It always starts with a 60–90 s **teaser**; the full 3–5 min film follows on
 #### Example: "Integration, explained" (teaser)
 
 [`examples/integration-teaser/script.json`](skills/business-explainer/examples/integration-teaser/script.json)
-is a complete teaser: 13 beats, 10 scenes, 182 words, about 88 s, roughly $0.08 to voice (1,033 characters).
+is a complete teaser: 13 beats, 10 scenes, 182 words, 84 s voiced, $0.08 to voice (1,033 characters).
 It uses diagram scenes only, so no unDraw downloads are needed:
 
 | # | Scene | What the narrator says / what builds on screen |
@@ -125,6 +125,10 @@ It uses diagram scenes only, so no unDraw downloads are needed:
 | 8 | `list` | three key points, each appearing on its own sentence |
 | 9 | `quote` | closing thought: *Before the next connection, ask: should it go through the hub?* |
 | 10 | `end` | *Integration, explained – thanks for watching* |
+
+**The finished teaser** (84 s, 1080p, narrator "George" via ElevenLabs on fal, voice cost ≈ $0.08) – click to play:
+
+[![Integration, explained – play the teaser](skills/business-explainer/examples/integration-teaser/video_thumbnail.png)](skills/business-explainer/examples/integration-teaser/integration-teaser.mp4)
 
 Review sheet from the free draft build (silent timing, 0 build warnings):
 
