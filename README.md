@@ -253,3 +253,17 @@ availability in the chosen BTP regions, and multi-tenant licensing.
   bundled as `LICENSE-btp-solution-diagrams.txt`).
 - unDraw, Lucide, GSAP, Inter and HyperFrames used by `business-explainer` are fetched at setup time and
   are subject to their own licences.
+
+## License
+
+[MIT](LICENSE) © 2026 Andreas Katzer – free to use, modify and redistribute, **including commercially**.
+
+The one condition is credit: keep the copyright and licence notice in every copy or substantial portion
+(for example the `LICENSE` file, or the notice at the top of a copied skill). A visible credit is
+appreciated, e.g.:
+
+> Based on [claude-public-skills](https://github.com/bright-fellow/claude-public-skills) by Andreas Katzer (MIT).
+
+Bundled third-party icons are not covered by MIT and keep their own terms (see
+[Third-party content and licences](#third-party-content-and-licences)).
+
