@@ -11,6 +11,7 @@ Claude (Claude.ai, Claude Code and the Claude Agent SDK). Each skill is a self-c
 | [`business-explainer`](skills/business-explainer/SKILL.md) | Produces a narrated business explainer video in a clean flat-vector style: one off-screen British narrator (ElevenLabs via fal), unDraw illustrations, Lucide icon diagrams, animated stats and lists, ducked series theme. Renders a 1920×1080 MP4 plus a review sheet. |
 | [`sap-btp-solution-diagrams`](skills/sap-btp-solution-diagrams/SKILL.md) | Creates SAP BTP solution diagrams / reference architectures in the official SAP BTP diagram style as editable draw.io (`.drawio`) files, with bundled SAP BTP service icons and Microsoft Azure architecture icons. Always delivers an L1 overview and an L2 deep dive. |
 | [`sap-btp-big-picture`](skills/sap-btp-big-picture/SKILL.md) | Builds "The Big Picture" – the SAP BTP capabilities reference-architecture poster (areas A–E, Platform Foundation, Open Ecosystem, Key Sites) – as one editable `.drawio`, either generic or tailored to an organisation with a live / planned / evaluate / out-of-scope status overlay. Uses the official SAP BTP solution-diagram icons and builds on `sap-btp-solution-diagrams`. |
+| [`leanix-reporting`](skills/leanix-reporting/SKILL.md) **(prototype)** | Reference for building SAP LeanIX EAM custom reports with `@leanix/reporting` and the `lxr` CLI: `lx.init()` / `lx.ready()` lifecycle, `ReportConfiguration`, facet filters and callbacks, GraphQL via `lx.executeGraphQL()`, side panes, state persistence, translation and field metadata. |
 
 ## Repository layout
 
@@ -32,15 +33,17 @@ skills/
 │   │   ├── style-guide.md           # palette, element catalogue, layout grid
 │   │   └── azure.md                 # Azure icon usage rules + role-to-icon mapping
 │   └── examples/                    # L1/L2 example layouts (easy archive, Integration Suite)
-└── sap-btp-big-picture/
-    ├── SKILL.md
-    ├── scripts/
-    │   ├── bigpicture.py            # poster library (imports btpdiagram.py from the sibling skill)
-    │   ├── find_icon.py
-    │   └── update_icons.py          # refreshes icons from github.com/SAP/btp-solution-diagrams
-    ├── assets/                      # official SAP icon set (Apache-2.0), manifest, brand-red theme
-    ├── references/                  # catalogue, style guide, team conventions
-    └── examples/                    # reference poster script, status + landscape configs
+├── sap-btp-big-picture/
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   ├── bigpicture.py            # poster library (imports btpdiagram.py from the sibling skill)
+│   │   ├── find_icon.py
+│   │   └── update_icons.py          # refreshes icons from github.com/SAP/btp-solution-diagrams
+│   ├── assets/                      # official SAP icon set (Apache-2.0), manifest, brand-red theme
+│   ├── references/                  # catalogue, style guide, team conventions
+│   └── examples/                    # reference poster script, status + landscape configs
+└── leanix-reporting/                # prototype
+    └── SKILL.md                     # API and CLI reference, patterns, workflow
 ```
 
 ## Installation
@@ -213,6 +216,14 @@ availability in the chosen BTP regions, and multi-tenant licensing.
   caches newer icons in `~/.cache/sap-btp-big-picture/` (needs network; falls back to the bundled set offline).
 - `references/our-conventions.md` and `examples/our_landscape.json` hold one team's own rules and landscape
   (brand-red theme, current systems). Replace them with your own.
+
+### leanix-reporting (prototype)
+
+- Status: **prototype**. A knowledge-only skill (no scripts or assets), not yet tested against a live
+  LeanIX workspace; check API details against the [typings docs](https://leanix.github.io/leanix-reporting/)
+  and the [official examples](https://github.com/leanix/leanix-reporting/tree/main/examples).
+- Building and uploading a report needs Node.js, `npm install -g @leanix/reporting-cli` and access to a
+  LeanIX workspace (`lxr init` → `lxr start` → `lxr upload`).
 
 ## Third-party content and licences
 
