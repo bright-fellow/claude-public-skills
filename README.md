@@ -11,6 +11,7 @@ Claude (Claude.ai, Claude Code and the Claude Agent SDK). Each skill is a self-c
 | [`business-explainer`](skills/business-explainer/SKILL.md) | Produces a narrated business explainer video in a clean flat-vector style: one off-screen British narrator (ElevenLabs via fal), unDraw illustrations, Lucide icon diagrams, animated stats and lists, ducked series theme. Renders a 1920×1080 MP4 plus a review sheet. |
 | [`sap-btp-solution-diagrams`](skills/sap-btp-solution-diagrams/SKILL.md) | Creates SAP BTP solution diagrams / reference architectures in the official SAP BTP diagram style as editable draw.io (`.drawio`) files, with bundled SAP BTP service icons and Microsoft Azure architecture icons. Always delivers an L1 overview and an L2 deep dive. |
 | [`sap-btp-big-picture`](skills/sap-btp-big-picture/SKILL.md) | Builds "The Big Picture" – the SAP BTP capabilities reference-architecture poster (areas A–E, Platform Foundation, Open Ecosystem, Key Sites) – as one editable `.drawio`, either generic or tailored to an organisation with a live / planned / evaluate / out-of-scope status overlay. Uses the official SAP BTP solution-diagram icons and builds on `sap-btp-solution-diagrams`. |
+| [`sap-btp-frontend`](skills/sap-btp-frontend/SKILL.md) | Entry point for SAP BTP frontend work (SAPUI5/OpenUI5, UI5 Web Components, UI5 Web Components for React, CAP, Fiori): picks the stack and output environment, then routes to the matching deep skill. Holds Fiori floorplan / action-placement guidance, CAP project conventions, SAP MCP server usage and a BTP deployment checklist itself. |
 | [`leanix-reporting`](skills/leanix-reporting/SKILL.md) **(prototype)** | Reference for building SAP LeanIX EAM custom reports with `@leanix/reporting` and the `lxr` CLI: `lx.init()` / `lx.ready()` lifecycle, `ReportConfiguration`, facet filters and callbacks, GraphQL via `lx.executeGraphQL()`, side panes, state persistence, translation and field metadata. |
 
 ## Repository layout
@@ -42,6 +43,8 @@ skills/
 │   ├── assets/                      # official SAP icon set (Apache-2.0), manifest, brand-red theme
 │   ├── references/                  # catalogue, style guide, team conventions
 │   └── examples/                    # reference poster script, status + landscape configs
+├── sap-btp-frontend/
+│   └── SKILL.md                     # stack decision, routing table, Fiori + CAP guidance
 └── leanix-reporting/                # prototype
     └── SKILL.md                     # API and CLI reference, patterns, workflow
 ```
@@ -216,6 +219,15 @@ availability in the chosen BTP regions, and multi-tenant licensing.
   caches newer icons in `~/.cache/sap-btp-big-picture/` (needs network; falls back to the bundled set offline).
 - `references/our-conventions.md` and `examples/our_landscape.json` hold one team's own rules and landscape
   (brand-red theme, current systems). Replace them with your own.
+
+### sap-btp-frontend
+
+- A routing hub: for UI5 API depth it hands off to `sapui5`, `ui5-webcomponents`, `ui5-webcomponents-react`
+  and `sap-ci-custom-adapter`, which are **not in this repository yet**. Without them it still covers stack
+  choice, Fiori floorplans, CAP structure, tooling and the BTP deployment checklist; architecture diagrams
+  route to `sap-btp-solution-diagrams` (included).
+- In coding sessions it prefers the SAP MCP servers (`@ui5/mcp-server`, `@cap-js/mcp-server`,
+  `@sap-ux/fiori-mcp-server`) when they are configured.
 
 ### leanix-reporting (prototype)
 
