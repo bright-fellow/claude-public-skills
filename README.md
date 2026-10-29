@@ -145,6 +145,52 @@ For the finished MP4, voice the script (§2d in the skill), put the series theme
 
   This writes `/tmp/easy-archive-L1.drawio`, which opens in diagrams.net, draw.io desktop or the VS Code
   draw.io extension.
+#### How the skill works
+
+Every architecture is drawn at **two levels** that share names, colours and step numbers: an **L1 overview**
+(products and platforms only, 6–10 blocks) and an **L2 deep dive** (services, zones, networking, HA/DR,
+protocol pills, full flow panel). A diagram is a short Python layout script against `scripts/btpdiagram.py`
+(`area`, `box`, `service`, `icon`, `edge`, `pill`, `num`, `flow_panel`, `legend`, `footer`). `save()` writes the
+`.drawio`, checks the layout (text overflow, overlaps, connectors crossing boxes, off-page elements) and renders
+a PNG preview for self-checking. Colour carries meaning: blue = SAP, grey = non-SAP / hyperscaler,
+teal = zones and regions, pink = trust and identity, dashed = optional or operational scope.
+
+#### Example: SAP Integration Suite, high availability across two regions, with SAP and Azure components
+
+Files in [`examples/output/`](skills/sap-btp-solution-diagrams/examples/output/), built from
+`examples/integration_suite_L2_deep_dive.py` and `examples/integration_suite_L1_overview.py` (0 layout warnings):
+
+- `integration-suite-ha-azure-rise-L2-deep-dive.drawio`
+- `integration-suite-ha-azure-rise-L1-overview.drawio`
+
+What the design encodes:
+
+- **Two Integration Suite tenants** in a primary and a secondary SAP BTP region (active, or hot standby),
+  kept identical by SAP Cloud Transport Management / CI/CD from Git. Stateful artefacts (JMS queues, data
+  stores) stay per tenant and are drained on failover.
+- **Azure Front Door** as the single global entry: custom domain, health probes, priority (active/standby)
+  or weighted (active-active for stateless iFlows) routing. S/4HANA Cloud and ECC call the Front Door
+  endpoint, so a region failover needs no change in the senders.
+- **SaaS endpoints**: SAP S/4HANA Cloud (OData / SOAP, events) and Salesforce (REST / SOAP / Bulk, Pub/Sub API).
+- **Customer Azure hub**: SAP Cloud Connector master/shadow pair across two availability zones, registered
+  in both subaccounts with the same location ID; zone-redundant Azure Firewall; Azure Key Vault; Azure
+  Monitor + SAP Cloud ALM.
+- **RISE with SAP**: ECC 6.0 on NetWeaver 7.5 in an SAP-managed Azure subscription, reached through VNet
+  peering (RFC, IDoc, SOAP), with application servers and HA database replication across two zones.
+- **Identity**: SAP Identity Authentication proxies Microsoft Entra ID for developers and admins; technical
+  OAuth clients and certificates are not federated.
+
+L2 deep dive (PNG preview, the deliverable is the `.drawio`):
+
+![Integration Suite HA multi-region L2 deep dive](skills/sap-btp-solution-diagrams/examples/output/integration-suite-ha-azure-rise-L2-deep-dive.png)
+
+L1 overview:
+
+![Integration Suite HA multi-region L1 overview](skills/sap-btp-solution-diagrams/examples/output/integration-suite-ha-azure-rise-L1-overview.png)
+
+To be confirmed per project (stated in the diagram footer): RISE HA/DR options, Integration Suite
+availability in the chosen BTP regions, and multi-tenant licensing.
+
 - Paths such as `/mnt/user-data/outputs/` and `/home/claude/preview/` in `SKILL.md` refer to the Claude.ai
   sandbox; adjust them when running elsewhere.
 
