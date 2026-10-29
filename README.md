@@ -10,26 +10,37 @@ Claude (Claude.ai, Claude Code and the Claude Agent SDK). Each skill is a self-c
 |---|---|
 | [`business-explainer`](skills/business-explainer/SKILL.md) | Produces a narrated business explainer video in a clean flat-vector style: one off-screen British narrator (ElevenLabs via fal), unDraw illustrations, Lucide icon diagrams, animated stats and lists, ducked series theme. Renders a 1920×1080 MP4 plus a review sheet. |
 | [`sap-btp-solution-diagrams`](skills/sap-btp-solution-diagrams/SKILL.md) | Creates SAP BTP solution diagrams / reference architectures in the official SAP BTP diagram style as editable draw.io (`.drawio`) files, with bundled SAP BTP service icons and Microsoft Azure architecture icons. Always delivers an L1 overview and an L2 deep dive. |
+| [`sap-btp-big-picture`](skills/sap-btp-big-picture/SKILL.md) | Builds "The Big Picture" – the SAP BTP capabilities reference-architecture poster (areas A–E, Platform Foundation, Open Ecosystem, Key Sites) – as one editable `.drawio`, either generic or tailored to an organisation with a live / planned / evaluate / out-of-scope status overlay. Uses the official SAP BTP solution-diagram icons and builds on `sap-btp-solution-diagrams`. |
 
 ## Repository layout
 
 ```
 skills/
 ├── business-explainer/
-│   └── SKILL.md                     # instructions + embedded toolkit (scripts, CSS, JS, template)
-└── sap-btp-solution-diagrams/
+│   ├── SKILL.md                     # instructions + embedded toolkit (scripts, CSS, JS, template)
+│   └── examples/integration-teaser/ # example script.json + review sheet
+├── sap-btp-solution-diagrams/
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   ├── btpdiagram.py            # diagram library (writes .drawio, optional PNG preview)
+│   │   └── find_icon.py             # search the bundled icon libraries
+│   ├── assets/
+│   │   ├── sap_btp_icons.json       # 76 official SAP BTP service icons
+│   │   ├── azure_icons.json         # 627 Microsoft Azure architecture icons
+│   │   └── azure-icons-terms-of-use.pdf
+│   ├── references/
+│   │   ├── style-guide.md           # palette, element catalogue, layout grid
+│   │   └── azure.md                 # Azure icon usage rules + role-to-icon mapping
+│   └── examples/                    # L1/L2 example layouts (easy archive, Integration Suite)
+└── sap-btp-big-picture/
     ├── SKILL.md
     ├── scripts/
-    │   ├── btpdiagram.py            # diagram library (writes .drawio, optional PNG preview)
-    │   └── find_icon.py             # search the bundled icon libraries
-    ├── assets/
-    │   ├── sap_btp_icons.json       # 76 official SAP BTP service icons
-    │   ├── azure_icons.json         # 627 Microsoft Azure architecture icons
-    │   └── azure-icons-terms-of-use.pdf
-    ├── references/
-    │   ├── style-guide.md           # palette, element catalogue, layout grid
-    │   └── azure.md                 # Azure icon usage rules + role-to-icon mapping
-    └── examples/                    # L1/L2 example layouts (easy archive, Integration Suite)
+    │   ├── bigpicture.py            # poster library (imports btpdiagram.py from the sibling skill)
+    │   ├── find_icon.py
+    │   └── update_icons.py          # refreshes icons from github.com/SAP/btp-solution-diagrams
+    ├── assets/                      # official SAP icon set (Apache-2.0), manifest, brand-red theme
+    ├── references/                  # catalogue, style guide, team conventions
+    └── examples/                    # reference poster script, status + landscape configs
 ```
 
 ## Installation
@@ -62,6 +73,66 @@ cp -r claude-public-skills/skills/* ~/.claude/skills/
   shows a cost estimate and waits for approval before generating audio.
 - Illustrations come from [unDraw](https://undraw.co), downloaded by the user.
 
+#### How the skill works
+
+The film is written as a `script.json` of **beats**. Each beat is one or two sentences for the narrator
+(`say`); a beat with a `show` block starts a new scene. Scene elements are **cued on spoken words**
+(`"at": "routes"`), so after voicing the build step looks up each word's timestamp and the diagram, number or
+bullet appears exactly when the narrator says it.
+
+Every film has the same frame: a **hook** question → a silent **title card** → problem → idea → how it works
+→ why it matters → **key points** → a **closing thought** → **end card**. Scene types: `hook`, `title`,
+`illustration`, `flow`, `hub`, `stat`, `compare`, `split`, `list`, `keyterm`, `quote`, `end`, `blank`.
+
+Pipeline (`X` = `~/.biz-explainer`, `WORK` = one folder per film):
+
+| Step | Command | Cost |
+|---|---|---|
+| Estimate length and price | `voices.py cost WORK` | free |
+| Silent draft timing (≈140 wpm) | `voices.py draft WORK` | free |
+| Resolve cues → HyperFrames project | `build.py WORK` | free |
+| Review sheet (every scene fully built) | `render.py WORK --preview` | free |
+| Voice the lines (after your go-ahead) | `voices.py jobs` → fal `submit_jobs` → `voices.py collect` / `build --check` | ≈ $0.08 per 1,000 characters |
+| Rebuild on the real voice, mix theme, render | `build.py` → `mix.py` → `render.py WORK` | free |
+
+It always starts with a 60–90 s **teaser**; the full 3–5 min film follows only once the style is approved.
+
+#### Example: "Integration, explained" (teaser)
+
+[`examples/integration-teaser/script.json`](skills/business-explainer/examples/integration-teaser/script.json)
+is a complete teaser: 13 beats, 10 scenes, 182 words, about 88 s, roughly $0.08 to voice (1,033 characters).
+It uses diagram scenes only, so no unDraw downloads are needed:
+
+| # | Scene | What the narrator says / what builds on screen |
+|---|---|---|
+| 1 | `hook` | "…all hold the same customer. So who makes sure they agree?" – *Who keeps your apps in sync?* |
+| 2 | `title` | silent – *Integration, explained* |
+| 3 | `split` | point-to-point vs. through a hub, each line cued on its word |
+| 4 | `compare` | 10 apps: up to 45 direct links vs. 10 through a hub (n·(n−1)/2, no external source needed) |
+| 5 | `keyterm` | *iPaaS* – Integration Platform as a Service, spelled out when first spoken |
+| 6 | `hub` | sales, finance, web shop, people, analytics plug into one platform |
+| 7 | `flow` | receive → translate → route → confirm, one order travelling through |
+| 8 | `list` | three key points, each appearing on its own sentence |
+| 9 | `quote` | closing thought: *Before the next connection, ask: should it go through the hub?* |
+| 10 | `end` | *Integration, explained – thanks for watching* |
+
+Review sheet from the free draft build (silent timing, 0 build warnings):
+
+![Review sheet of the Integration, explained teaser](skills/business-explainer/examples/integration-teaser/review_sheet.png)
+
+Reproduce it:
+
+```bash
+mkdir -p ~/films/integration-teaser && cp skills/business-explainer/examples/integration-teaser/script.json ~/films/integration-teaser/
+```
+
+```bash
+cd ~/.biz-explainer/scripts && python3 voices.py draft ~/films/integration-teaser && python3 build.py ~/films/integration-teaser && python3 render.py ~/films/integration-teaser --preview
+```
+
+For the finished MP4, voice the script (§2d in the skill), put the series theme at `WORK/music.mp3`, then run
+`build.py`, `mix.py` and `render.py WORK`.
+
 ### sap-btp-solution-diagrams
 
 - Pure Python, no network needed. `cairosvg` is optional and only used to render a PNG preview for
@@ -77,6 +148,26 @@ cp -r claude-public-skills/skills/* ~/.claude/skills/
 - Paths such as `/mnt/user-data/outputs/` and `/home/claude/preview/` in `SKILL.md` refer to the Claude.ai
   sandbox; adjust them when running elsewhere.
 
+### sap-btp-big-picture
+
+- Needs `sap-btp-solution-diagrams` installed next to it (as in this repo) or `BTP_DIAGRAM_SKILL` pointing at it.
+- Generic poster:
+
+  ```bash
+  python3 skills/sap-btp-big-picture/examples/big_picture_reference.py /tmp/big-picture
+  ```
+
+- Tailored poster from a landscape config (theme, chips, current solutions, statuses):
+
+  ```bash
+  python3 skills/sap-btp-big-picture/examples/big_picture_reference.py /tmp/our-big-picture --config skills/sap-btp-big-picture/examples/our_landscape.json
+  ```
+
+- `scripts/update_icons.py --check` compares the bundled icon set with the latest SAP upstream commit and
+  caches newer icons in `~/.cache/sap-btp-big-picture/` (needs network; falls back to the bundled set offline).
+- `references/our-conventions.md` and `examples/our_landscape.json` hold one team's own rules and landscape
+  (brand-red theme, current systems). Replace them with your own.
+
 ## Third-party content and licences
 
 - **Microsoft Azure architecture icons** (`assets/azure_icons.json`) are © Microsoft and are bundled for
@@ -88,5 +179,8 @@ cp -r claude-public-skills/skills/* ~/.claude/skills/
 - **SAP BTP icons** (`assets/sap_btp_icons.json`) and the diagram style follow SAP's public
   [BTP solution diagram guidelines](https://github.com/SAP-archive/sap-btp-reference-architectures).
   SAP and the SAP logo are trademarks of SAP SE.
+- **Official SAP BTP solution-diagram icons** in `sap-btp-big-picture/assets/sap_official_icons.json` come from
+  [SAP/btp-solution-diagrams](https://github.com/SAP/btp-solution-diagrams) under Apache-2.0 (licence text
+  bundled as `LICENSE-btp-solution-diagrams.txt`).
 - unDraw, Lucide, GSAP, Inter and HyperFrames used by `business-explainer` are fetched at setup time and
   are subject to their own licences.
