@@ -288,7 +288,11 @@ class BigPicture:
         color = STATUS[status][2] if status else INK
         self.text(cx - w / 2, ty, lines, size=12, bold=True, color=color, align="center", w=w, lh=15)
         if status:
-            self.status_dot(cx + w / 2 - 14, ty + 6, status)
+            dx = text_width(lines[0], 12, True) / 2 + 10   # just after the first label line ...
+            if dx + 6 <= w / 2:
+                self.status_dot(cx + dx, ty + 6, status)
+            else:                                           # ... or beside the icon when the label fills the tile
+                self.status_dot(cx + 26, y + 6, status)
 
     def chips(self, x, y, w, items, cols=1, h=24, gap=8, gapy=6, title=False, size=11):
         """Grid of chips filling width w. items: str or list of lines (or (lines, status) tuples).

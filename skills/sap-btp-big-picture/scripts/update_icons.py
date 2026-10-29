@@ -27,7 +27,9 @@ ICONS_FILE, MANIFEST = "sap_official_icons.json", "icons_manifest.json"
 CATS = {"00": "Foundational", "01": "Integration Suite", "02": "App Dev & Automation", "04": "Data & Analytics",
         "05": "AI", "06": "BTP SaaS", "99": "Other service"}
 FIX = {  # file slugs whose automatic title-casing reads badly
-    "sap-btp_abap-environment": "SAP BTP, ABAP environment", "sap-btp_cloud-foundry-runtime": "SAP BTP, Cloud Foundry runtime",
+    "sap-btp_abap-environment": "SAP BTP, ABAP environment",
+    "sap-business-ai-platform_abab_environment_sd": "SAP BTP, ABAP environment",  # upstream rename (Oct 2026), typo is SAP's
+    "sap-btp-cloud-foundry-runtime": "SAP BTP, Cloud Foundry runtime", "sap-btp_cloud-foundry-runtime": "SAP BTP, Cloud Foundry runtime",
     "sap-btp_kyma-runtime": "SAP BTP, Kyma runtime", "sap-identity-provisoning": "SAP Identity Provisioning",
     "joule studio": "Joule Studio", "sap-business-accelerator- hub": "SAP Business Accelerator Hub",
     "sap-s4hana-for-microsoft-teams": "SAP S/4HANA for Microsoft Teams", "oauth-20-on-sap-btp": "OAuth 2.0 on SAP BTP",
@@ -82,7 +84,8 @@ def clean_data(data):
 def service_name(raw):
     m = re.match(r"(\d+)-(.*?)(?:[_ ]sd)?(?:\.svg)?$", raw.strip())
     if not m:
-        return re.sub(r"\s+", " ", raw).strip(), None
+        bare = re.sub(r"(?:[_ ]sd)?(?:\.svg)?$", "", raw.strip())
+        return FIX.get(bare) or FIX.get(bare + "_sd") or re.sub(r"\s+", " ", raw).strip(), None
     sid, slug = m.groups()
     slug = slug.replace("sap-cloud-identity_", "")
     if slug in FIX:

@@ -77,6 +77,10 @@ cp -r claude-public-skills/skills/* ~/.claude/skills/
   Whisper model) and a headless Chrome/Chromium.
 - Narration uses the paid `elevenlabs/tts/eleven-v4` endpoint on [fal](https://fal.ai); the skill always
   shows a cost estimate and waits for approval before generating audio.
+- **Free alternative for the voice:** [Kokoro TTS](https://kokorottsai.com/) can be used instead of fal /
+  ElevenLabs at no cost. The skill is built around fal's ElevenLabs endpoint (it uses its word timestamps for
+  the cues), so a Kokoro voice-over needs a small change to `voices.py`; lines without timestamps fall back to
+  estimated word timing.
 - Illustrations come from [unDraw](https://undraw.co), downloaded by the user.
 
 #### How the skill works
@@ -217,6 +221,23 @@ availability in the chosen BTP regions, and multi-tenant licensing.
 
 - `scripts/update_icons.py --check` compares the bundled icon set with the latest SAP upstream commit and
   caches newer icons in `~/.cache/sap-btp-big-picture/` (needs network; falls back to the bundled set offline).
+- **Example: ACME AG customer Big Picture** (fictional company) in
+  [`examples/output/`](skills/sap-btp-big-picture/examples/output/): the reference poster with the status overlay
+  from `examples/customer_status_example.json`, built with
+
+  ```bash
+  python3 skills/sap-btp-big-picture/examples/big_picture_reference.py skills/sap-btp-big-picture/examples/output/acme-sap-btp-big-picture --status skills/sap-btp-big-picture/examples/customer_status_example.json --customer "ACME AG" --version "v0.1 · example"
+  ```
+
+  Statuses: **live** (green) e.g. SAP Build Code, Process Automation, Integration Suite, Cloud Integration,
+  API Management, SAP Datasphere, SAP Analytics Cloud, Identity Authentication; **planned** (blue dashed) e.g.
+  Build Work Zone, ABAP Cloud, Advanced Event Mesh, Document Information Extraction; **evaluate** (orange dashed)
+  e.g. Build Apps, SAP Databricks, Joule Studio; **out of scope** (grey) e.g. Business Warehouse, PI/PO, Trading
+  Partner Management, SAP Translation Hub. Everything else stays neutral. 0 layout warnings; icon set
+  SAP/btp-solution-diagrams commit `57199627` (2026-10-02).
+
+  ![ACME AG SAP BTP Big Picture with status overlay](skills/sap-btp-big-picture/examples/output/acme-sap-btp-big-picture.png)
+
 - `references/our-conventions.md` and `examples/our_landscape.json` hold one team's own rules and landscape
   (brand-red theme, current systems). Replace them with your own.
 

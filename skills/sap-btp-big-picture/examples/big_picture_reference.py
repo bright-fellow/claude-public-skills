@@ -239,7 +239,8 @@ def build(out, status=None, customer=None, version=None, note=None, list_labels=
               ("btp:Migration Assessment", ["Migration Assessment", "& Tools"])]]
     for r, row in enumerate(tiles):
         for c, (ic, lab) in enumerate(row):
-            bp.tile(3975 + c * 130, 846 + r * 100, lab, icon=ic, w=130 if lab[0] != "Migration Assessment" else 150)
+            wide = lab[0] == "Migration Assessment"   # nudged right so it clears the Event Mesh status dot
+            bp.tile(3965 + c * 120 + (20 if wide else 0), 846 + r * 100, lab, icon=ic, w=150 if wide else 120)
     bp.group(3792, 1146, 466, 78, "On premises", fill="#F5F6F7", dashed=True, title_size=11)
     bp.icon("btp:Edge Integration Cell", 3806, 1176, 28, halo=False)
     bp.text(3842, 1174, ["Edge Integration Cell", "on-prem to on-prem"], size=11, bold=False, w=140, lh=14)
